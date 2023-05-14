@@ -136,7 +136,7 @@ class Play extends Phaser.Scene {
     }
 
     IncreaseSpeed() {
-        if (this.Faster < 15){
+        if (this.Faster < 18){
             this.Faster = this.Faster + 0.1;
         }
     }
