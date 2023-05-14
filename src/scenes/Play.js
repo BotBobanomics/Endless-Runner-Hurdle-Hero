@@ -47,6 +47,7 @@ class Play extends Phaser.Scene {
         this.AnimPlay = 0;
         // display score
         this.distance = 0;
+        this.HiRun = localStorage.getItem("score");
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -89,12 +90,16 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, 40, 'Game Over', menuConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, 80, 'Press (R) to restart', menuConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, 120, 'You ran: ' + this.formatMeters(this.distance) + ' meters!', menuConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, 160, 'Best run was: ' + this.formatMeters(this.HiRun) + ' meters!', menuConfig).setOrigin(0.5);
         }
         // Keep game running until they lose
         if (this.gameOver == false){
             this.distance += this.Faster;
             this.scoreLeft.setText("Meters: " + this.formatMeters(this.distance));
-
+            if (this.distance > this.HiRun){
+                this.HiRun = this.distance;
+                localStorage.setItem("score", this.HiRun);
+            }
             // Sends obstacle if they are not jumping
             if (this.player.y >= 410 || this.obstacle.x < 639){
                 this.obstacle.update(this.Faster);
@@ -143,7 +148,7 @@ class Play extends Phaser.Scene {
 
     formatMeters(ms){
         // convert scroll speed to 'meters'
-        let meters = Math.floor(ms/1000);
+        let meters = Math.floor(ms/100);
         meters = meters.toString()
         return `${meters}`
     }
