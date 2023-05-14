@@ -4,6 +4,10 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
+        this.load.audio('sfx_jump', './assets/cartoon-jump.wav');
+        this.load.audio('sfx_run', './assets/running-sounds.wav');
+        this.load.audio('sfx_crash', './assets/hurdle-crash.wav');
+        this.load.audio('Music', './assets/BackgroundMusic.mp3');
         this.load.image('trackfield', './assets/InGameTrack.png');
     }
 
@@ -31,7 +35,7 @@ class Menu extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySpace)){
-            this.scene.start('tutorialScene');
+            this.scene.start('creditScene');
         }
     }
 }

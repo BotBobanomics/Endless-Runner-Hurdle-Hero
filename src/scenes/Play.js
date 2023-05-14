@@ -21,20 +21,6 @@ class Play extends Phaser.Scene {
         // game over variable
         this.gameOver = false;
 
-        // GameOver Text config
-        let menuConfig = {
-            fontFamily: 'Courier',
-            fontSize: '27px',
-            //backgroundColor: '#F3B141',
-            color: '#000000',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 0
-        }
-
         // Animation config
         this.anims.create({
             key: 'Run',
@@ -45,6 +31,13 @@ class Play extends Phaser.Scene {
 
         this.player.play('Run');
         this.AnimPlay = 0;
+        // Sound for running
+        this.RunSound = this.sound.add('sfx_run');
+        this.RunSound.play();
+        // Background Music;
+        this.BGMusic = this.sound.add('Music');
+        this.BGMusic.loop = true;
+        this.BGMusic.play();
         // display score
         this.distance = 0;
         this.HiRun = localStorage.getItem("score");
@@ -87,6 +80,8 @@ class Play extends Phaser.Scene {
                 },
                 fixedWidth: 0
             }
+            this.RunSound.stop();
+            this.BGMusic.stop();
             this.add.text(game.config.width/2, 40, 'Game Over', menuConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, 80, 'Press (R) to restart', menuConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, 120, 'You ran: ' + this.formatMeters(this.distance) + ' meters!', menuConfig).setOrigin(0.5);
@@ -105,9 +100,11 @@ class Play extends Phaser.Scene {
                 this.obstacle.update(this.Faster);
             }
 
+            // Game Over
             this.jumping();
             if (this.checkCollision(this.player, this.obstacle)){
                 this.gameOver = true;
+                this.sound.play('sfx_crash');
             }
         }
     }
@@ -118,10 +115,13 @@ class Play extends Phaser.Scene {
             this.player.play({key: 'Run', startFrame: 5, repeat: 0});
             this.player.setVelocityY(-175);
             this.AnimPlay = 1;
+            this.sound.play('sfx_jump');
+            this.RunSound.stop();
         }
         else if (this.AnimPlay == 1 && this.player.y >= 410){
             this.player.play('Run');
             this.AnimPlay = 0;
+            this.RunSound.play();
         }
     }
 
@@ -129,11 +129,6 @@ class Play extends Phaser.Scene {
         // checking if runner and hurdle collides
         if (player.x < hurdle.x + hurdle.width && player.x + 10 > hurdle.x && player.y < hurdle.y + hurdle.height && 40 + player.y > hurdle.y){
             this.player.play({key: 'Run', repeat: 0});
-            console.log(hurdle.x + hurdle.width);
-            console.log(player.x);
-            console.log(player.x + player.width);
-            console.log(hurdle.x);
-            console.log(player.y);
             return true;
         } else {
             return false;
