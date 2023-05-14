@@ -33,7 +33,7 @@ class Credits extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, game.config.width, 460, true, true, true, true);
         this.player = this.physics.add.sprite(70, 420, 'RunningMan', 0).setBounce(0.1).setCollideWorldBounds(true);
         this.anims.create({
-            key: 'StartingPosition',
+            key: 'StartPosition',
             frames: this.anims.generateFrameNumbers('RunningMan', { start: 0, end: 0, first: 0}),
             frameRate: 8,
         });
